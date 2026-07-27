@@ -1,1 +1,1 @@
-Browser's Launcher script cmd/powershell hybrid
+Browser's launcher script cmd/powershell hybrid
