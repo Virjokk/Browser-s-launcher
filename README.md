@@ -1,1 +1,1 @@
-Launcher browser's cmd/powershell hybrid script
+Launcher browser's script cmd/powershell hybrid
