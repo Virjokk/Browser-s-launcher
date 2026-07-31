@@ -1,1 +1,1 @@
-Scripts for launching browsers
+Scripts for launching and update browsers
