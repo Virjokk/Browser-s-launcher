@@ -1,1 +1,1 @@
-Browser's launcher script cmd/powershell hybrid
+Scripts for launching browsers
