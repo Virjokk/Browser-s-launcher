@@ -677,18 +677,6 @@ Function Make-NetRequest ([string]$Url,[int]$Timeout=10) {
    }
 }
 
-# Простейший HTML-парсер для извлечения ссылок
-Function Get-HtmlLinks ([string]$Html) {
-   $pattern = '<a\s+[^>]*href=["''](.*?)["'']'
-   $matches = [regex]::Matches($html, $pattern, "IgnoreCase")
-
-   foreach ($m in $matches) {
-       $href = $m.Groups[1].Value;
-       if ($href -match '^(#|javascript:)') { continue };
-       $href
-   }
-}
-
 # Получение номера версии и ссылки на установщик
 Function Get-LatestVersion {
    if (-not (Test-DNS)) {$Script:checkError = $true; return $false}
@@ -697,11 +685,7 @@ Function Get-LatestVersion {
    Write-Host "Request:   $url"
 
    try {
-      $html = (Make-NetRequest -Url $url).Content.ReadAsStringAsync().Result
-      if (-not $html) {throw 'html is NULL'}
-      $Script:latest = [version](
-        (Get-HtmlLinks -Html $html) -like "*/tag/*" -replace ".+/tag/v*" | Select-Object -First 1
-      )
+      $Script:latest = [version]((Make-NetRequest -Url $url).RequestMessage.RequestUri.AbsoluteUri -Split 'tag/v')[1]
       if (-not $latest) {throw 'latest is NULL'}
    } catch {
       Write-Host "$_.Exception.Message" @red

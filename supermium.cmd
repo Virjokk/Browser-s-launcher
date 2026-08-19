@@ -637,7 +637,7 @@ Function Get-HtmlLinks ([string]$Html) {
    }
 }
 
-# Получение номера версии и ссылки на установщик
+# Получение номера версии
 Function Get-LatestVersion {
    if (-not (Test-DNS)) {$Script:checkError = $true; return $false}
    Write-Host "Get-LatestVersion..."
@@ -646,9 +646,7 @@ Function Get-LatestVersion {
    Write-Host "Request:     $url"
 
    try {
-      $html = (Make-NetRequest -Url "$url/latest").Content.ReadAsStringAsync().Result
-      if (-not $html) {throw 'html is NULL'}
-      $Script:latest = (Get-HtmlLinks -Html $html) -like "*/tag/*" -replace ".+/tag/v*" | Select-Object -First 1
+      $Script:latest = [version]((Make-NetRequest -Url $url).RequestMessage.RequestUri.AbsoluteUri -Split 'tag/v')[1]
       if (-not $latest) {throw 'latest is NULL'}
    } catch {
       Write-Host "$_.Exception.Message" @red
@@ -661,6 +659,7 @@ Function Get-LatestVersion {
    return $true
 }
 
+# Сравнение версий
 Function Check-NewVersion {
    if (-not (Get-LatestVersion)) {return $false}
 

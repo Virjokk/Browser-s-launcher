@@ -596,18 +596,6 @@ Function Make-NetRequest ([string]$Url,[int]$Timeout=10) {
    }
 }
 
-# Простейший HTML-парсер для извлечения ссылок
-Function Get-HtmlLinks ([string]$Html) {
-   $pattern = '<a\s+[^>]*href=["''](.*?)["'']'
-   $matches = [regex]::Matches($html, $pattern, "IgnoreCase")
-
-   foreach ($m in $matches) {
-       $href = $m.Groups[1].Value;
-       if ($href -match '^(#|javascript:)') { continue };
-       $href
-   }
-}
-
 # Получение номера версии и ссылки на установщик
 Function Get-LatestVersion {
    if (-not (Test-DNS)) {$Script:checkError = $true; return $false}
