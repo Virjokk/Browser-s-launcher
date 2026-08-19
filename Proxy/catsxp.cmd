@@ -36,7 +36,7 @@ $Bitness = "x64" # для 32bit-версии указать "x86"
 $AppDir = "App" # папка сборки, создается рядом со скриптом
 $UseProxy = 0 # 0 - не включать, 1 - только для браузера, 2 - для браузера и для проверки/закачки обновлений
 $ProxyPath = "" # путь к файлу опера прокси, если оставить пустым, будет скачан с github.com (при $UseProxy <> 0)
-$ProxyArg = "-bind-address 127.0.0.1:18091","-verbosity 30","-country AM" # параметры прокси
+$ProxyArg = "-override-proxy-address 77.111.247.79","-api-proxy `"http://s6402013510115:s1609900520681@202.28.17.8:8080`"" # параметры прокси
 $ShowConsole = $false # показывать консоль при старте для контроля ошибок
 
 $Switches = @( # ключи запуска браузера
@@ -1139,14 +1139,9 @@ Function Get-Proxy {
 
    try {
       $proxyResponse = Make-NetRequest -Url 'https://github.com/Alexey71/opera-proxy/releases/latest'
-      $htmlProxy = $proxyResponse.Content.ReadAsStringAsync().Result
-      if (-not $htmlProxy) {throw 'htmlProxy is NULL'}
-      $lastproxy = $null
-      $lastproxy = [version](
-         (Get-HtmlLinks -Html $htmlProxy) -like "*/tag/*" -replace ".+/tag/v*" | Select-Object -First 1
-      )
+      $lastproxy = [version]($proxyResponse.RequestMessage.RequestUri.AbsoluteUri -Split 'tag/v')[1]
       if (-not $lastproxy) {throw 'lastproxy is NULL'}
-      $urlproxy = 'https://github.com/Alexey71/opera-proxy/releases/download/v'+"$lastproxy"+'/opera-proxy.windows-amd64.exe'
+      $urlproxy = 'https://github.com/Alexey71/opera-proxy/releases/latest/download/opera-proxy.windows-amd64.exe'
       Write-Host "Proxy latest: $lastproxy"
    } catch {
       Write-Host "$_.Exception.Message" @red

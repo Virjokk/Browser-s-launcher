@@ -43,7 +43,7 @@ $7zpath = "" # локальный путь к 7zr.exe или 7z.exe, если о
 $DllPath = "" # локальный путь к windows_x86/x64.zip или setdll.7z, если оставить пустым, будет скачан с github.com
 $UseProxy = 0 # 0 - не включать, 1 - только для браузера, 2 - для браузера и для проверки/закачки обновлений
 $ProxyPath = "" # путь к файлу опера прокси, если оставить пустым, будет скачан с github.com (при $UseProxy <> 0)
-$ProxyArg = "-bind-address 127.0.0.1:18092","-verbosity 30","-country AM" # параметры прокси
+$ProxyArg = "-override-proxy-address 77.111.247.79","-api-proxy `"http://s6402013510115:s1609900520681@202.28.17.8:8080`"" # параметры прокси
 $ShowConsole = $false # показывать консоль при старте для контроля ошибок
 
 $Switches = @( # ключи запуска браузера
@@ -635,18 +635,6 @@ Function Make-NetRequest ([string]$Url,[int]$Timeout=10) {
    }
 }
 
-# Простейший HTML-парсер для извлечения ссылок
-Function Get-HtmlLinks ([string]$Html) {
-   $pattern = '<a\s+[^>]*href=["''](.*?)["'']'
-   $matches = [regex]::Matches($html, $pattern, "IgnoreCase")
-
-   foreach ($m in $matches) {
-       $href = $m.Groups[1].Value;
-       if ($href -match '^(#|javascript:)') { continue };
-       $href
-   }
-}
-
 # Получение номера версии и ссылки на установщик
 Function Get-LatestVersion {
    if (-not (Test-DNS)) {$Script:checkError = $true; return $false}
@@ -1002,14 +990,9 @@ Function Get-Proxy {
 
    try {
       $proxyResponse = Make-NetRequest -Url 'https://github.com/Alexey71/opera-proxy/releases/latest'
-      $htmlProxy = $proxyResponse.Content.ReadAsStringAsync().Result
-      if (-not $htmlProxy) {throw 'htmlProxy is NULL'}
-      $lastproxy = $null
-      $lastproxy = [version](
-         (Get-HtmlLinks -Html $htmlProxy) -like "*/tag/*" -replace ".+/tag/v*" | Select-Object -First 1
-      )
+      $lastproxy = [version]($proxyResponse.RequestMessage.RequestUri.AbsoluteUri -Split 'tag/v')[1]
       if (-not $lastproxy) {throw 'lastproxy is NULL'}
-      $urlproxy = 'https://github.com/Alexey71/opera-proxy/releases/download/v'+"$lastproxy"+'/opera-proxy.windows-amd64.exe'
+      $urlproxy = 'https://github.com/Alexey71/opera-proxy/releases/latest/download/opera-proxy.windows-amd64.exe'
       Write-Host "Proxy latest: $lastproxy"
    } catch {
       Write-Host "$_.Exception.Message" @red
