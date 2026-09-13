@@ -11,7 +11,7 @@ Set-StrictMode -Version 2
 #   Добавление DLL в Import Table PE32/PE32+ EXE/DLL.
 #
 # Аналог:
-#   setdll.exe /d:version.dll opera.exe
+#   setdll.exe /d:version.dll chrome.exe
 #
 # По умолчанию используется IMPORT BY ORDINAL #1,
 # как в Microsoft Detours setdll.
@@ -2887,13 +2887,13 @@ function Test-DllExportOrdinal1 {
 # ------------------------------------------------------------
 # 1. Полный аналог:
 #
-#    setdll-x64.exe /d:version.dll opera.exe
+#    setdll-x64.exe /d:version.dll chrome.exe
 #
 # ------------------------------------------------------------
 
 $result =
     Add-DllImport `
-        -Path '.\opera.exe' `
+        -Path '.\chrome.exe' `
         -DllName 'version.dll' `
         -Ordinal 1 `
         -Backup `
@@ -2904,12 +2904,12 @@ $result | Format-List *
 
 
 # ------------------------------------------------------------
-# 2. Не меняется исходный opera.exe
+# 2. Не меняется исходный chrome.exe
 # ------------------------------------------------------------
 
 $result =
     Add-DllImport `
-        -Path '.\opera.exe' `
+        -Path '.\chrome.exe' `
         -OutputPath '.\opera_patched.exe' `
         -DllName 'version.dll' `
         -Ordinal 1 `
