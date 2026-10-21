@@ -1496,7 +1496,11 @@ Function Update-Browser {
 }
 
 # New profile
-Function Create-Profile ([version]$Version,[object]$Settings) {
+Function Create-Profile {
+   param(
+      [version]$Version,
+      [object]$Settings
+   )
    Write-Host "Create-Profile..."
    $localStateContent = @(
       '{"browser":{"enabled_labs_experiments":["cashback-extension-download@2","enable-parallel-downloading@1","gx-liv'
