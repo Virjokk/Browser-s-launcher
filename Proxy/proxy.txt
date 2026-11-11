@@ -1,0 +1,1 @@
+https://api.proxyscrape.com/v2/?request=getproxies&protocol=HTTP&timeout=10000&country=all&ssl=all&anonymity=all
