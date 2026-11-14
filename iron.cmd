@@ -354,7 +354,7 @@ $Trash = @( # Folders and files outside the profile that should be deleted after
 # ============================================================================
 
 $lastcheck = "18032026"
-$lastclean = "12112026"
+$lastclean = "18032026"
 
 $scriptName = $MyInvocation.Line -replace "[^']+'([A-Za-z]:\\.+)'[^']+",'$1'
 $scriptPath = Split-Path -Path $scriptName -Parent
