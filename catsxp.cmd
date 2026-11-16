@@ -1122,7 +1122,7 @@ Function Create-Profile {
       'ues":{"anti_abuse":2},"exit_type":"Normal","last_time_obsolete_http_credentials_removed":1683284292.442684,"las'
       't_time_password_store_metrics_reported":1683284262.464805,"managed_user_id":"","name":"User 1","were_old_google'
       '_logins_removed":true},"safebrowsing":{"event_timestamps":{},"metrics_last_log_time":"13327757832"},"savefile":'
-      '{"default_directory":"D:\\Inet_OK"},"sessions":{"event_log":[{"crashed":false,"time":"13327757832550393","type"'
+      '{"default_directory":""},"sessions":{"event_log":[{"crashed":false,"time":"13327757832550393","type"'
       ':0},{"restore_browser":true,"synchronous":true,"time":"13327757832831433","type":5},{"errored_reading":false,"t'
       'ab_count":0,"time":"13327757834234623","type":1,"window_count":0},{"did_schedule_command":true,"first_session_s'
       'ervice":true,"tab_count":1,"time":"13327758246138298","type":2,"window_count":1}],"session_data_status":3},"set'
