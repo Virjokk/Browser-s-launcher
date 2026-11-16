@@ -1090,7 +1090,7 @@ Function Create-Profile {
       'count":0,"p3a_fp_standard_domain_count":0,"p3a_fp_strict_domain_count":0},"catsxp_sync_v2":{"reset_devices_prog'
       'ress_token_time":"13327757833155538","v1_meta_info_cleared":true,"v1_migrated":true},"countryid_at_install":210'
       '77,"default_apps_install_state":3,"domain_diversity":{"last_reporting_timestamp":"13327757834824807"},"download'
-      '":{"default_directory":"D:\\Inet_OK"},"extensions":{"alerts":{"initialized":true},"chrome_url_overrides":{},"la'
+      '":{"default_directory":""},"extensions":{"alerts":{"initialized":true},"chrome_url_overrides":{},"la'
       'st_chrome_version":"0.0.0.0"},"gcm":{"product_category_for_subtypes":"com.catsxp.windows"},"google":{"services"'
       ':{"consented_to_sync":false,"signin_scoped_device_id":"11111111-1111-1111-1111-111111111111"}},"intl":{"selecte'
       'd_languages":"ru-RU,ru,en-US,en"},"invalidation":{"per_sender_topics_to_handler":{"1013309121859":{},"818103597'
