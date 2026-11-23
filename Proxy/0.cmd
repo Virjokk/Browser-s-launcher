@@ -1520,3 +1520,4 @@ try {
    Exit-SingleInstance
    if ($ShowConsole) {[void][Console]::ReadKey($true)}
 }
+
