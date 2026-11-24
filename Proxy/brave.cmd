@@ -1083,6 +1083,87 @@ Function Update-Browser {
 
 }
 
+# Proxy settings
+Function Get-Proxy {
+   if (-not $UseProxy) {return $false}
+
+   if (-not $ProxyArg) {$Script:ProxyArg = '-'}
+
+   try {[datetime]::parseexact($lastcheck, 'ddMMyyyy', $null)} catch {$lastcheck='18032026'}
+   $daysCheckProxy = (New-TimeSpan -Start $([datetime]::parseexact($lastcheck, 'ddMMyyyy', $null))).Days
+
+   if ($RunMode -eq 1 -or $daysCheckProxy -lt [int]$CheckInterval+99) {
+      if ([IO.File]::Exists($ProxyPath)) {
+         return $true
+      }
+   }
+
+   try {
+      $response = Make-NetRequest -Url 'https://github.com/Alexey71/opera-proxy/releases/latest'
+      $lastproxy = [version]($response.RequestMessage.RequestUri.AbsoluteUri -Split 'tag/v')[1]
+      if (-not $lastproxy) {throw 'lastproxy is NULL'}
+      $urlproxy = 'https://github.com/Alexey71/opera-proxy/releases/latest/download/opera-proxy.windows-amd64.exe'
+      Write-Host "Proxy latest: $lastproxy"
+   } catch {
+      Write-Host "$_.Exception.Message" @red
+      Write-Host "Error check proxy latest" @red
+      if ([IO.File]::Exists($ProxyPath)) {return $true} else {return $false}
+   } finally {
+      if ($response) {$response.Dispose()}
+   }
+
+   if ([IO.File]::Exists($ProxyPath)) {
+
+      try {
+         $proxyVersion = (&($ProxyPath) -version 2>$null) -Split 'v'
+         if ($proxyVersion.Count -gt 1) {
+            $currproxy = [version]$proxyVersion[1]
+         } else {
+            $currproxy = [version]"0.0.0"
+         }
+      } catch {
+         Write-Host "Error check proxy current" @red
+         $currproxy = [version]"0.0.0"
+      }
+
+      if ($lastproxy -gt $currproxy) {
+         Write-Host "Proxy installed: $currproxy - update is available"
+         Move-Item -LiteralPath $ProxyPath -Destination "$ProxyPath.old" -ErrorAction SilentlyContinue
+         if (Download-File -Source $urlproxy -Dest $ProxyPath) {
+            Write-Host "Proxy new v$lastproxy download: OK" @green
+            try {[System.IO.File]::Delete("$ProxyPath.old")}
+            catch {Write-Host "$_.Exception.Message" @red}
+         } else {
+            Move-Item -LiteralPath "$ProxyPath.old" -Destination $ProxyPath -Force -ErrorAction SilentlyContinue
+         }
+      }  else {
+         Write-Host "Proxy installed: $currproxy - no update required"
+      }
+      return $true
+
+   } else {
+
+      try {
+         $dirproxy = Split-Path -Path $ProxyPath -Parent
+      } catch {
+         Write-Host "$_.Exception.Message" @red
+         Show-Balloon -Message "Error path opera-proxy" -MessageType "Error"
+         return $false
+      }
+
+      if (-not [IO.Directory]::Exists($dirproxy)) {
+         [IO.Directory]::CreateDirectory($dirproxy) | Out-Null
+         Write-Host "Create folder $($dirproxy): OK" @green
+      }
+      if (Download-File -Source $urlproxy -Dest $ProxyPath) {
+         Write-Host "Proxy v$lastproxy download: OK" @green
+         return $true
+      }
+   }
+
+   return $false
+}
+
 # Configuration of ini for version.dll
 Function Check-IniFile {
     param(
