@@ -44,7 +44,7 @@ $VersionDll = 0 # 0 - version.dll the Bush2021, 1 - the ca-x (czyt.tech)
 $ExtFolder = "" # A folder for additional files (CSS, JS) next to the script; if left empty, the folder will not be created.
 $AppDir = "App" # The build folder is created in the same folder as the script.
 $7zpath = "" # The local path to 7zr.exe or 7z.exe; if left empty, it will be downloaded from github.com.
-$DllPath = "" # The local path to vivaldi-windows-x86/x64.zip or setdll.7z; if left empty, it will be downloaded from github.com.
+$DllPath = "" # The local path to windows_x86/x64.zip or setdll.7z; if left empty, it will be downloaded from github.com.
 $ShowConsole = $false # Show the console at startup to monitor errors.
 
 $Switches = @( # browser launch keys
@@ -499,7 +499,7 @@ if ($ConfigCache -ne 'nul') {
    $cachePath = [IO.Path]::GetFullPath([IO.Path]::Combine($AppPath, $($ConfigCache -replace '%app%','.')))
 }
 
-if ($VersionDll -ne 0 -and $DllPath -and "$(Split-Path -Parent $DllPath)\vivaldi-windows-$Bitness.zip" -ne $DllPath) {
+if ($VersionDll -ne 0 -and $DllPath -and "$(Split-Path -Parent $DllPath)\windows_$Bitness.zip" -ne $DllPath) {
    $DllPath = $null
 }
 
@@ -998,12 +998,12 @@ Function Update-Browser {
           Write-Host "Download 7-zip: OK" @green
       }
 
-      # setdll.7z, vivaldi-windows-x86/x64.zip
+      # setdll.7z, windows_x86/x64.zip
       if (-not [IO.File]::Exists("$DllPath")) {
          $DllPath,$dllUrl = if ($VersionDll -eq 0) {
             "$tmpdir\setdll.7z","https://github.com/Bush2021/chrome_plus/releases/latest/download/setdll.7z"
          } else {
-            "$tmpdir\vivaldi-windows-$Bitness.zip","https://github.com/ca-x/vivaldi_plus/releases/latest/download/vivaldi-windows-$Bitness.zip"
+            "$tmpdir\windows_$Bitness.zip","https://github.com/ca-x/vivaldi_plus/releases/latest/download/windows_$Bitness.zip"
          }
          if (-not (Download-File -Source $dllUrl -Dest $DllPath)) {throw}
          Write-Host "Download $($DllUrl.Split('/')[-1]): OK" @green
@@ -1038,9 +1038,9 @@ Function Update-Browser {
          try {
             Add-Type -Assembly System.IO.Compression.FileSystem -ErrorAction Stop
             [System.IO.Compression.ZipFile]::ExtractToDirectory($DllPath, "$tmpdir\Vivaldi-bin")
-            Write-Host "Unpack vivaldi-windows-$Bitness.zip: OK" @green
+            Write-Host "Unpack windows_$Bitness.zip: OK" @green
          } catch {
-            Show-Balloon -Message "Error unpack vivaldi-windows-$Bitness.zip" -MessageType "Error"
+            Show-Balloon -Message "Error unpack windows_$Bitness.zip" -MessageType "Error"
             throw $_
          }
       }
